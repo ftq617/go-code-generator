@@ -26,14 +26,21 @@ project:
     path: "C:\\lt_file\\lt_file\\project\\disaster_backup"  # 代码生成路径
 
 ```
+### 代码模板在 resource/temp下 
 
 ### 项目使用
-```go run main.go table list```   
+```shell
+go run main.go table list
+```   
 查看数据库列表
-```go run main.go table show <table_name>```
+```shell
+go run main.go table show <table_name>
+```
 查看表结构
-```go run main.go code create -n <table_name> ```
-生成表代码，可多个
+```shell
+go run main.go code create -n <table_name> 
+```
+生成表golang代码，可多个
 
 
 
