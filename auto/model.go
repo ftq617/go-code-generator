@@ -11,6 +11,8 @@ type AutoCodeStruct struct {
 	TableInfo
 	Fields     []TableColumnInfo `json:"fields"`
 	StructName string            `json:"structName"`
+	PackageName string
+	RouterName string
 }
 
 type GLOBALMODEL struct {

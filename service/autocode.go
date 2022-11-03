@@ -54,13 +54,14 @@ func Autocode(tableList []auto.TableInfo) error {
 				continue
 			}
 			j.FieldJson = j.ColumnName
-			j.FieldType = autocode.GetDbType(j.DataType)
+			j.FieldType = autocode.GetFieldType(j.FieldName,j.DataType,j.ColumnType)
 			if j.FieldType == "time.Time"{
 				v.HasTime = true
 			}
 			fields = append(fields,j)
 		}
-		autoData = append(autoData, auto.AutoCodeStruct{ *conf.Project,v, fields, ""})
+		autoData = append(autoData, auto.AutoCodeStruct{
+			*conf.Project,v, fields, "","",""})
 	}
 
 	var allTempFile []string
@@ -90,9 +91,12 @@ func Autocode(tableList []auto.TableInfo) error {
 func autocodeFile(tv auto.AutoCodeStruct, fv string) error {
 	// 开始生成 代码
 	autoPath := tv.Path + "\\" + tv.Abbr + "\\"
-	if strings.Index(fv, "user tag") >= 0 {
+	filename := strings.ReplaceAll(tv.TableName,"_","")
+	if strings.Index(fv, "mysql") >= 0 {
 		// TODO 这里根据自己的需求 自己加逻辑
-		autoPath += "router/"
+		autoPath += "store\\" + fv[14:strings.Index(fv, ".")] + "\\"
+	} else if strings.Index(fv, "apis") >= 0 {
+		autoPath += fv[14:strings.Index(fv, ".")] + "\\" + filename + "\\"
 	} else {
 		autoPath += fv[14:strings.Index(fv, ".")] + "\\"
 	}
@@ -106,16 +110,17 @@ func autocodeFile(tv auto.AutoCodeStruct, fv string) error {
 		logger.Log.WithFields(logrus.Fields{"data": err}).Error("代码生成出错")
 		return err
 	}
-	structName := tv.TableName
-	tv.StructName = structName
+	tv.StructName = tv.TableName
+	tv.PackageName = filename
+	tv.RouterName = strings.ReplaceAll(tv.TableName,"_","-")
 
-	file, _ := os.OpenFile(autoPath+structName+".go", os.O_CREATE|os.O_WRONLY, 0755)
+	file, _ := os.OpenFile(autoPath+filename+".go", os.O_CREATE|os.O_WRONLY, 0755)
 	err = files.Execute(file, tv)
 	if err != nil {
 		logger.Log.WithFields(logrus.Fields{"data": err}).Error("代码生成失败")
 		return err
 	}
-	logger.Log.WithFields(logrus.Fields{"data": autoPath + structName + ".go"}).Info("代码生成文件")
+	logger.Log.WithFields(logrus.Fields{"data": autoPath + filename + ".go"}).Info("代码生成文件")
 	return nil
 }
 

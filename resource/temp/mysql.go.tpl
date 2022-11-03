@@ -46,7 +46,7 @@ if err := r.With(ctx).Model(&model.{{.SupStructName}}{}).Where("id IN (?)", ids)
 	return nil
 }
 
-// Update根据id 更新 ，排除零值
+// Update 根据id 更新 ，排除零值
 func (r *{{.LowStructName}}) Update(ctx context.Context,id uint64,values interface{}) error {
 	query := r.With(ctx).Model(&model.{{.SupStructName}}{}).
    		Where("id = ?", id).Updates(values)
@@ -60,7 +60,7 @@ func (r *{{.LowStructName}}) Update(ctx context.Context,id uint64,values interfa
 }
 
 // Get (id int64)  根据id获取model
-func (r *{{.LowStructName}}) Get(ctx context.Context,id uint64, selectQuery...string) (*model.{{.SupStructName}}, error) {
+func (r *{{.LowStructName}}) Get(ctx context.Context,id uint64, selectQuery ...string) (*model.{{.SupStructName}}, error) {
     var obj model.{{.SupStructName}}
 	query := r.With(ctx).Model(&model.{{.SupStructName}}{})
 	if len(selectQuery) != 0 {

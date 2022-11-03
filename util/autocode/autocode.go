@@ -1,33 +1,94 @@
 package autocode
 
-func GetDbType(dt string) string {
+import (
+	"strings"
+)
+
+const (
+	Unsigned = "unsigned"
+
+	Varchar = "varchar"
+	Datetime = "datetime"
+	Timestamp = "timestamp"
+	Double = "double"
+	Float = "float"
+	Decimal = "decimal"
+	Int = "int"
+	Tinyint = "tinyint"
+	Smallint = "smallint"
+	Mediumint = "mediumint"
+	Integer = "integer"
+	Bigint = "bigint"
+)
+
+const (
+	String = "string"
+	Time = "time.Time"
+	Float64 = "float64"
+	Int64 = "int64"
+	Uint64 = "uint64"
+	Intg = "int"
+	Uintg = "uint"
+)
+
+func GetDbType(dt,ct string) string {
 	switch dt {
-	case "varchar":
-		return "string"
-	case "datetime":
-		return "time.Time"
-	case "timestamp":
-		return "time.Time"
-	case "double":
-		return "float64"
-	case "float":
-		return "float64"
-	case "decimal":
-		return "float64"
-	case "int":
-		return "int64"
-	case "tinyint":
-		return "int64"
-	case "smallint":
-		return "int64"
-	case "mediumint":
-		return "int64"
-	case "integer":
-		return "int64"
-	case "bigint":
-		return "int64"
+	case Varchar:
+		return String
+	case Datetime:
+		return Time
+	case Timestamp:
+		return Time
+	case Double:
+		return Float64
+	case Float:
+		return Float64
+	case Decimal:
+		return Float64
+	case Int:
+		if strings.Contains(strings.ToLower(ct),Unsigned) {
+			return Uintg
+		}
+		return Intg
+	case Tinyint:
+		if strings.Contains(strings.ToLower(ct),Unsigned) {
+			return Uintg
+		}
+		return Intg
+	case Smallint:
+		if strings.Contains(strings.ToLower(ct),Unsigned) {
+			return Uintg
+		}
+		return Intg
+	case Mediumint:
+		if strings.Contains(strings.ToLower(ct),Unsigned) {
+			return Uint64
+		}
+		return Int64
+	case Integer:
+		if strings.Contains(strings.ToLower(ct),Unsigned) {
+			return Uint64
+		}
+		return Int64
+	case Bigint:
+		if strings.Contains(strings.ToLower(ct),Unsigned) {
+			return Uint64
+		}
+		return Int64
 	default:
-		return "string"
+		return String
 	}
 
+}
+
+const DeletedField = "Deleted"
+const DeletedType = "mysql.Deleted"
+
+func GetFieldType(field,dt,ct string) string {
+	dtype := GetDbType(dt,ct)
+	// deleted 处理逻辑
+	if field == DeletedField && dtype == Uint64 {
+		return DeletedType
+	}
+	return dtype
 }

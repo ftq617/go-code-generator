@@ -8,6 +8,6 @@ database:
 project:
   name: "灾备"
   abbr: "internal"        # 代码在项目下的目录
-  mod:  "disaster_backup" # 项目 mod 名
-  router: "disaster_backup" # 模块路由名
+  mod:  "disasterbackup" # 项目 mod 名
+  router: "disasterbackup" # 模块路由名
   path: "C:\\lt_file\\lt_file\\project\\disaster_backup"  # 代码生成路径
