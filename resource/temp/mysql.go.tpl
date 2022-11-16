@@ -23,14 +23,14 @@ type {{.LowStructName}} struct {
 }
 
 // Create 创建
-func (r *{{.LowStructName}}) Create(ctx context.Context, data *model.{{.SupStructName}}) error {
+func (r *{{.LowStructName}}) Create(ctx context.Context, data *model.{{.SupStructName}}) (string, error) {
     if err := r.With(ctx).Model(data).Create(data).Error; err != nil {
-        return errors.WithStack(code.ErrDatabaseException.WithResult(err.Error()))
+        return 0, errors.WithStack(code.ErrDatabaseException.WithResult(err.Error()))
     }
-	return nil
+	return data.PK(), nil
 }
 // Deleted 根据ID删除
-func (r *{{.LowStructName}}) Deleted(ctx context.Context, id uint64) error {
+func (r *{{.LowStructName}}) Delete(ctx context.Context, id string) error {
     if err := r.With(ctx).Model(&model.{{.SupStructName}}{}).Where("id = ?", id).
     	Delete(&model.{{.SupStructName}}{}).Error; err != nil {
     	return errors.WithStack(code.ErrDatabaseException.WithResult(err.Error()))
@@ -38,7 +38,7 @@ func (r *{{.LowStructName}}) Deleted(ctx context.Context, id uint64) error {
 	return nil
 }
 // DeletedByIds 根据ID批量删除
-func (r *{{.LowStructName}}) DeletedByIds(ctx context.Context, ids []uint64) error {
+func (r *{{.LowStructName}}) DeleteByIds(ctx context.Context, ids []string) error {
 if err := r.With(ctx).Model(&model.{{.SupStructName}}{}).Where("id IN (?)", ids).
     	Delete(&model.{{.SupStructName}}{}).Error; err != nil {
     	return errors.WithStack(code.ErrDatabaseException.WithResult(err.Error()))
@@ -47,7 +47,7 @@ if err := r.With(ctx).Model(&model.{{.SupStructName}}{}).Where("id IN (?)", ids)
 }
 
 // Update 根据id 更新 ，排除零值
-func (r *{{.LowStructName}}) Update(ctx context.Context,id uint64,values interface{}) error {
+func (r *{{.LowStructName}}) Update(ctx context.Context,id string,values interface{}) error {
 	query := r.With(ctx).Model(&model.{{.SupStructName}}{}).
    		Where("id = ?", id).Updates(values)
    	if err := query.Error; err != nil {
@@ -60,7 +60,7 @@ func (r *{{.LowStructName}}) Update(ctx context.Context,id uint64,values interfa
 }
 
 // Get (id int64)  根据id获取model
-func (r *{{.LowStructName}}) Get(ctx context.Context,id uint64, selectQuery ...string) (*model.{{.SupStructName}}, error) {
+func (r *{{.LowStructName}}) Get(ctx context.Context,id string, selectQuery ...string) (*model.{{.SupStructName}}, error) {
     var obj model.{{.SupStructName}}
 	query := r.With(ctx).Model(&model.{{.SupStructName}}{})
 	if len(selectQuery) != 0 {
@@ -80,6 +80,9 @@ func (r *{{.LowStructName}}) Get(ctx context.Context,id uint64, selectQuery ...s
 func (r *{{.LowStructName}}) List(ctx context.Context, data *request.Query{{.SupStructName}}Req) ([]*model.{{.SupStructName}}, error) {
     var list []*model.{{.SupStructName}}
     query := r.With(ctx).Model(&model.{{.SupStructName}}{})
+    if data.Select != "" {
+    		query = query.Select(data.Select)
+    }
    	if data.ID != 0 {
    		query = query.Where("id = ?", data.ID)
    	}

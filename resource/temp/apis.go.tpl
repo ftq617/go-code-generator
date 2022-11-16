@@ -7,7 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 
     "{{.ModName}}/{{.Abbr}}/request"
+    "{{.ModName}}/internal/response"
 	"{{.ModName}}/{{.Abbr}}/service"
+	"{{.ModName}}/pkg/code"
 	"{{.ModName}}/pkg/resp"
 )
 
@@ -26,20 +28,20 @@ func Create{{.SupStructName}}(c *gin.Context) {
     	resp.Error(c, err)
     	return
     }
-   	c.JSON(http.StatusOK, gin.H{"id":id})
+   	c.JSON(http.StatusOK, response.ID{ID: id})
 }
 
 
 func Delete{{.SupStructName}}(c *gin.Context) {
     ctx := c.Request.Context()
-    id, err := strconv.ParseUint(c.Param("id"), 10, 64)
-    if err !=nil{
-        resp.ErrorParam(c, err)
+    id := c.Param("id")
+    if id == ""{
+        resp.ErrorParam(c, code.ErrInvalidParam)
         return
     }
 
 	s := service.NewService()
-	if err := s.{{.SupStructName}}().Deleted(ctx, id); err != nil {
+	if err := s.{{.SupStructName}}().Deleted(ctx, c.Param("id")); err != nil {
 		resp.Error(c, err)
 		return
 	}
@@ -50,9 +52,9 @@ func Delete{{.SupStructName}}(c *gin.Context) {
 
 func Update{{.SupStructName}}(c *gin.Context) {
     ctx := c.Request.Context()
-    id, err := strconv.ParseUint(c.Param("id"), 10, 64)
-    if err !=nil{
-        resp.ErrorParam(c, err)
+    id := c.Param("id")
+    if id == ""{
+        resp.ErrorParam(c, code.ErrInvalidParam)
         return
     }
 
@@ -74,9 +76,9 @@ func Update{{.SupStructName}}(c *gin.Context) {
 
 func Get{{.SupStructName}}(c *gin.Context) {
     ctx := c.Request.Context()
-    id, err := strconv.ParseUint(c.Param("id"), 10, 64)
-    if err !=nil{
-        resp.ErrorParam(c, err)
+    id := c.Param("id")
+    if id == ""{
+        resp.ErrorParam(c, code.ErrInvalidParam)
         return
     }
 
