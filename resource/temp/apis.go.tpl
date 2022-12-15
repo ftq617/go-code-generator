@@ -2,7 +2,6 @@ package {{.PackageName}}
 
 import (
     "net/http"
-    "strconv"
 
 	"github.com/gin-gonic/gin"
 
@@ -41,7 +40,7 @@ func Delete{{.SupStructName}}(c *gin.Context) {
     }
 
 	s := service.NewService()
-	if err := s.{{.SupStructName}}().Deleted(ctx, c.Param("id")); err != nil {
+	if err := s.{{.SupStructName}}().Delete(ctx, c.Param("id")); err != nil {
 		resp.Error(c, err)
 		return
 	}
@@ -65,7 +64,7 @@ func Update{{.SupStructName}}(c *gin.Context) {
 		return
 	}
 	s := service.NewService()
-    err = s.{{.SupStructName}}().Update(ctx, id, &req)
+    err := s.{{.SupStructName}}().Update(ctx, id, &req)
     if err != nil {
        resp.Error(c, err)
        return

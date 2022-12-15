@@ -25,11 +25,11 @@ type {{.LowStructName}} struct {
 // Create 创建
 func (r *{{.LowStructName}}) Create(ctx context.Context, data *model.{{.SupStructName}}) (string, error) {
     if err := r.With(ctx).Model(data).Create(data).Error; err != nil {
-        return 0, errors.WithStack(code.ErrDatabaseException.WithResult(err.Error()))
+        return "", errors.WithStack(code.ErrDatabaseException.WithResult(err.Error()))
     }
 	return data.PK(), nil
 }
-// Deleted 根据ID删除
+// Delete 根据ID删除
 func (r *{{.LowStructName}}) Delete(ctx context.Context, id string) error {
     if err := r.With(ctx).Model(&model.{{.SupStructName}}{}).Where("id = ?", id).
     	Delete(&model.{{.SupStructName}}{}).Error; err != nil {
@@ -37,7 +37,7 @@ func (r *{{.LowStructName}}) Delete(ctx context.Context, id string) error {
     }
 	return nil
 }
-// DeletedByIds 根据ID批量删除
+// DeleteByIds 根据ID批量删除
 func (r *{{.LowStructName}}) DeleteByIds(ctx context.Context, ids []string) error {
 if err := r.With(ctx).Model(&model.{{.SupStructName}}{}).Where("id IN (?)", ids).
     	Delete(&model.{{.SupStructName}}{}).Error; err != nil {
@@ -68,7 +68,7 @@ func (r *{{.LowStructName}}) Get(ctx context.Context,id string, selectQuery ...s
 	}
 	if err := query.Where("id = ?", id).First(&obj).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.WithStack(code.ErrNotFound)
+			return nil, errors.WithStack(code.ErrNotFound.WithResult("{{.SupStructName}} not found, id :" + id))
 		}
 		return nil, errors.WithStack(code.ErrDatabaseException.WithResult(err.Error()))
 	}

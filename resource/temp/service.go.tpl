@@ -45,15 +45,15 @@ func (a {{.LowStructName}}Srv) Update(ctx context.Context, id string, data *requ
 	return nil
 }
 
-func (a {{.LowStructName}}Srv) Deleted(ctx context.Context, id string) error {
-	if err := store.Client().{{.SupStructName}}().Deleted(ctx, id); err != nil {
+func (a {{.LowStructName}}Srv) Delete(ctx context.Context, id string) error {
+	if err := store.Client().{{.SupStructName}}().Delete(ctx, id); err != nil {
 		return errors.WithStack(err)
 	}
 	return nil
 }
 
-func (a {{.LowStructName}}Srv) DeletedByIds(ctx context.Context, ids []string) error {
-	if err := store.Client().{{.SupStructName}}().DeletedByIds(ctx, ids); err != nil {
+func (a {{.LowStructName}}Srv) DeleteByIds(ctx context.Context, ids []string) error {
+	if err := store.Client().{{.SupStructName}}().DeleteByIds(ctx, ids); err != nil {
 		return errors.WithStack(err)
 	}
 	return nil
