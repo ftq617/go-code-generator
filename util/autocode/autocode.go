@@ -82,7 +82,7 @@ func GetDbType(dt,ct string) string {
 }
 
 const DeletedField = "Deleted"
-const DeletedType = "mysql.Deleted"
+const DeletedType = "storage.Deleted"
 
 func GetFieldType(field,dt,ct string) string {
 	dtype := GetDbType(dt,ct)

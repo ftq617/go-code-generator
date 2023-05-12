@@ -2,12 +2,12 @@ database:
   url: localhost
   ip: localhost
   port: 3306
-  database: chatserver
+  database: disaster_backup
   username: root
   password: 123456
 project:
   name: "灾备"
   abbr: "internal"        # 代码在项目下的目录
-  mod:  "chatserver" # 项目 mod 名
-  router: "chatserver" # 模块路由名
-  path: "E:\\my_develop_project\\5v-project\\tk-letter-wss\\chat-server"  # 代码生成路径
+  mod:  "disasterbackup" # 项目 mod 名
+  router: "disasterbackup" # 模块路由名
+  path: "/mnt/c/lt_file/lt_file/project/disaster_backup"  # 代码生成路径

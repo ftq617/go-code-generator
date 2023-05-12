@@ -2,7 +2,7 @@ package model
 
 import (
     {{ if .HasTime}}"time"{{ end }}
-
+    "template/pkg/storage"
     "{{.ModName}}/pkg/storage/mysql"
 )
 

@@ -5,21 +5,22 @@ import (
 
     "github.com/pkg/errors"
     "gorm.io/gorm"
+    codex "template/pkg/code"
+    "template/pkg/storage"
 
-    "{{.ModName}}/pkg/code"
+    "{{.ModName}}/internal/code"
     "{{.ModName}}/{{.Abbr}}/model"
     "{{.ModName}}/{{.Abbr}}/request"
-    "{{.ModName}}/pkg/storage/mysql"
 )
 
-func new{{.SupStructName}}(db *mysql.DB) *{{.LowStructName}} {
+func new{{.SupStructName}}(db *storage.DB) *{{.LowStructName}} {
 	return &{{.LowStructName}}{
 		DB: db,
 	}
 }
 
 type {{.LowStructName}} struct {
-	*mysql.DB
+	*storage.DB
 }
 
 // Create 创建
@@ -68,7 +69,7 @@ func (r *{{.LowStructName}}) Get(ctx context.Context,id string, selectQuery ...s
 	}
 	if err := query.Where("id = ?", id).First(&obj).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.WithStack(code.ErrNotFound.WithResult("{{.SupStructName}} not found, id :" + id))
+			return nil, errors.WithStack(codex.ErrNotFound.WithResult("{{.SupStructName}} not found, id :" + id))
 		}
 		return nil, errors.WithStack(code.ErrDatabaseException.WithResult(err.Error()))
 	}

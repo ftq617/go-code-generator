@@ -5,13 +5,13 @@ import (
 
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
+	"template/pkg/logger"
 
 
 	"{{.ModName}}/{{.Abbr}}/store"
     "{{.ModName}}/{{.Abbr}}/model"
 	"{{.ModName}}/{{.Abbr}}/request"
 	"{{.ModName}}/{{.Abbr}}/response"
-	"{{.ModName}}/pkg/logger"
 )
 
 type {{.SupStructName}}Srv interface {

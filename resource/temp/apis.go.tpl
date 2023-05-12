@@ -4,6 +4,8 @@ import (
     "net/http"
 
 	"github.com/gin-gonic/gin"
+	"template/pkg/code"
+	"template/pkg/resp"
 
     "{{.ModName}}/{{.Abbr}}/request"
     "{{.ModName}}/internal/response"

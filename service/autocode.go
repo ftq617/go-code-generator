@@ -90,15 +90,15 @@ func Autocode(tableList []auto.TableInfo) error {
 
 func autocodeFile(tv auto.AutoCodeStruct, fv string) error {
 	// 开始生成 代码
-	autoPath := tv.Path + "\\" + tv.Abbr + "\\"
+	autoPath := tv.Path + "/" + tv.Abbr + "/"
 	filename := strings.ReplaceAll(tv.TableName,"_","")
 	if strings.Index(fv, "mysql") >= 0 {
 		// TODO 这里根据自己的需求 自己加逻辑
-		autoPath += "store\\" + fv[14:strings.Index(fv, ".")] + "\\"
+		autoPath += "store/" + fv[14:strings.Index(fv, ".")] + "/"
 	} else if strings.Index(fv, "apis") >= 0 {
-		autoPath += fv[14:strings.Index(fv, ".")] + "\\" + filename + "\\"
+		autoPath += fv[14:strings.Index(fv, ".")] + "/" + filename + "/"
 	} else {
-		autoPath += fv[14:strings.Index(fv, ".")] + "\\"
+		autoPath += fv[14:strings.Index(fv, ".")] + "/"
 	}
 	if err := DirExistAndMake(autoPath); err != nil {
 		return err
